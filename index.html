@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Randomizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app">
+    <div class="bottom-glow"></div>
+    <div id="splash-screen">
+      <div class="cube"></div>
+    </div>
+    <div id="main-screen" class="screen main-flow hidden">
+      <div class="greeting-card"><p id="greeting"></p></div>
+      <div class="resolution-card">
+        <div class="card-top-icons">
+          <button class="icon-btn" id="like-btn"><span id="like-icon"></span></button>
+          <button class="icon-btn" id="copy-btn"><span id="copy-icon"></span></button>
+        </div>
+        <div class="resolution-text-wrap">
+          <div class="scroll-track"><div class="scroll-thumb" id="scroll-thumb"></div></div>
+          <p id="main-resolution"></p>
+          <p id="main-infoslide" class="info-slide-text"></p>
+        </div>
+        <div class="card-bottom-icons">
+          <button class="icon-btn" id="another-btn"><span id="another-icon"></span></button>
+        </div>
+      </div>
+    </div>
+    <div id="categories-screen" class="screen hidden">
+      <div id="category-grid"></div>
+    </div>
+    <div id="liked-screen" class="screen hidden">
+      <div class="liked-header"><h2>Мои резолюции:</h2></div>
+      <div id="liked-list"></div>
+    </div>
+    <div id="bottom-nav">
+      <div class="nav-highlight" id="nav-highlight"></div>
+      <button class="nav-btn" data-screen="categories-screen"><span class="nav-icon-grid"></span></button>
+      <button class="nav-btn" data-screen="main-screen"><span class="nav-icon-dice"></span></button>
+      <button class="nav-btn" data-screen="liked-screen"><span class="nav-icon-heart"></span></button>
+    </div>
+  </div>
+<script src="resolutions.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
