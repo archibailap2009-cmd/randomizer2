@@ -166,7 +166,11 @@ body {
   justify-content: center;
   max-height: calc(100vh - 72px - 130px);
   overflow-y: auto;
+  overflow-x: hidden;
   padding-bottom: 40px;
+  padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #C5CAE0 transparent;
 }
 
 .grid-fade {
