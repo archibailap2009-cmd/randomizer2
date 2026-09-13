@@ -306,7 +306,10 @@ body {
   width: 24px;
   height: 24px;
   position: relative;
-  html, body {
+  z-index: 2;
+}
+
+html, body {
   height: 100%;
   margin: 0;
   overflow: hidden;
