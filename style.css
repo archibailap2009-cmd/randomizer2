@@ -355,8 +355,30 @@ html, body {
   overflow-y: auto;
   overflow-x: hidden;
   padding-bottom: 40px;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: #C5CAE0 transparent;
 }
 #category-grid::-webkit-scrollbar {
-  display: none;
+  width: 4px;
+}
+#category-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+#category-grid::-webkit-scrollbar-thumb {
+  background: #C5CAE0;
+  border-radius: 3px;
+}
+.screen {
+  scrollbar-width: thin;              /* Firefox */
+  scrollbar-color: #C5CAE0 transparent;
+}
+.screen::-webkit-scrollbar {
+  width: 4px;                          /* Chrome/Safari */
+}
+.screen::-webkit-scrollbar-track {
+  background: transparent;
+}
+.screen::-webkit-scrollbar-thumb {
+  background: #C5CAE0;
+  border-radius: 3px;
 }
