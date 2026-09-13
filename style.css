@@ -12,7 +12,8 @@ body {
   position: relative;
   max-width: 390px;
   margin: 0 auto;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .hidden { display: none !important; }
@@ -45,9 +46,12 @@ body {
 /* ===== SCREENS ===== */
 .screen {
   padding: 72px 30px 130px;
-  min-height: 844px;
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  box-sizing: border-box;
 }
-
 .main-flow {
   display: flex;
   flex-direction: column;
