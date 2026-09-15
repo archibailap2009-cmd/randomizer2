@@ -359,7 +359,7 @@ html, body {
   overflow-y: auto;
   overflow-x: hidden;
   padding-bottom: 40px;
-  padding-right: 30px;
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: #C5CAE0 transparent;
 }
