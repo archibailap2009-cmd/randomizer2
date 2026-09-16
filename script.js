@@ -102,12 +102,8 @@ function showScreen(id) {
 }
 
 function moveHighlight(btn) {
-  const nav = btn.parentElement;
-  const navRect = nav.getBoundingClientRect();
-  const btnRect = btn.getBoundingClientRect();
-  const offset = btnRect.left - navRect.left;
-  navHighlight.style.width = `${btnRect.width}px`;
-  navHighlight.style.transform = `translateX(${offset}px)`;
+  navHighlight.style.width = `${btn.offsetWidth}px`;
+  navHighlight.style.transform = `translateX(${btn.offsetLeft}px)`;
 }
 
 navBtns.forEach(btn => {
