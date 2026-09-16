@@ -187,7 +187,7 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   padding-bottom: 40px;
-  scrollbar-gutter: stable;
+  padding-right: 14px;   /* ← вернули запас под скроллбар */
   scrollbar-width: thin;
   scrollbar-color: #C5CAE0 transparent;
 }
@@ -308,7 +308,23 @@ body {
   gap: 12px;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   z-index: 10;
+}
+
+.nav-btn {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 54px;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #FFCB6B;
 }
 
 .nav-highlight {
@@ -321,21 +337,6 @@ body {
   border-radius: 27px;
   transition: transform 0.3s ease;
   z-index: 0;
-}
-
-.nav-btn {
-  position: relative;
-  z-index: 1;
-  width: 100px;
-  height: 54px;
-  flex: none;
-  background: transparent;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #FFCB6B;
 }
 
 .nav-btn.active { color: #32427A; }
