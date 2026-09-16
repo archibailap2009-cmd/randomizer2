@@ -88,10 +88,10 @@ function showScreen(id) {
   document.getElementById(id).classList.remove("hidden");
   document.getElementById(id).scrollTop = 0;
 
-  navBtns.forEach((btn, i) => {
+  navBtns.forEach((btn) => {
     if (btn.dataset.screen === id) {
       btn.classList.add("active");
-      navHighlight.style.transform = `translateX(${i * 112}px)`;
+      moveHighlight(btn);
     } else {
       btn.classList.remove("active");
     }
@@ -99,6 +99,15 @@ function showScreen(id) {
 
   if (id === "categories-screen") renderCategories();
   if (id === "liked-screen") renderLiked();
+}
+
+function moveHighlight(btn) {
+  const nav = btn.parentElement;
+  const navRect = nav.getBoundingClientRect();
+  const btnRect = btn.getBoundingClientRect();
+  const offset = btnRect.left - navRect.left;
+  navHighlight.style.width = `${btnRect.width}px`;
+  navHighlight.style.transform = `translateX(${offset}px)`;
 }
 
 navBtns.forEach(btn => {
