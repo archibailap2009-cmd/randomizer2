@@ -187,12 +187,11 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   padding-bottom: 40px;
-  padding-right: 14px;
-  scrollbar-width: thin;
-  scrollbar-color: #C5CAE0 transparent;
+  scrollbar-width: none;           /* Firefox */
 }
 #category-grid::-webkit-scrollbar {
-  width: 4px;
+  display: none;                   /* Chrome/Safari */
+}
 }
 #category-grid::-webkit-scrollbar-track {
   background: transparent;
@@ -226,6 +225,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   text-align: left;
+  overflow: hidden;   /* ← не даём контенту распирать карточку */
 }
 
 .cat-badge {
@@ -246,6 +246,10 @@ body {
   line-height: 1.2;
   text-align: left;
   margin-top: 10px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;      /* максимум 3 строки, дальше — многоточие */
+  -webkit-box-orient: vertical;
 }
 
 .cat-bottom-row {
@@ -299,24 +303,36 @@ body {
   bottom: 50px;
   left: 50%;
   transform: translateX(-50%);
-  width: min(330px, calc(100% - 60px));
+  width: min(330px, calc(100% - (2 * var(--side-pad))));
   height: 60px;
   padding: 3px;
   background: #3D4D87;
   border-radius: 30px;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   align-items: center;
-  justify-content: center;
   overflow: hidden;
   z-index: 10;
+}
+
+.nav-highlight {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc((100% - 30px) / 3); /* минус паддинги (6px) и 2 гэпа (24px) */
+  height: 54px;
+  background: #FFCB6B;
+  border-radius: 27px;
+  --i: 0;
+  transform: translateX(calc(var(--i) * (100% + 12px)));
+  transition: transform 0.3s ease;
+  z-index: 0;
 }
 
 .nav-btn {
   position: relative;
   z-index: 1;
-  flex: 1 1 0;
-  min-width: 0;
   height: 54px;
   background: transparent;
   border: none;
@@ -325,17 +341,6 @@ body {
   justify-content: center;
   cursor: pointer;
   color: #FFCB6B;
-}
-
-.nav-highlight {
-  position: absolute;
-  top: 3px;
-  left: 0;
-  height: 54px;
-  background: #FFCB6B;
-  border-radius: 27px;
-  transition: transform 0.3s ease, width 0.3s ease;
-  z-index: 0;
 }
 .nav-btn.active { color: #32427A; }
 
@@ -352,4 +357,12 @@ html, body {
   margin: 0;
   overflow: hidden;
   overscroll-behavior: none;
+}
+:root {
+  --side-pad: clamp(16px, 6vw, 30px);
+}
+
+.screen {
+  padding: 72px var(--side-pad) 130px;
+  /* остальное без изменений */
 }
