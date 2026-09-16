@@ -215,6 +215,7 @@ body {
 .category-card {
   width: 100%;
   aspect-ratio: 1 / 1;
+  min-height: 0;      /* ← убирает скрытый "пол" по контенту */
   padding: 10px;
   background: #465790;
   border-radius: 25px;
@@ -225,7 +226,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   text-align: left;
-  overflow: hidden;   /* ← не даём контенту распирать карточку */
+  overflow: hidden;
 }
 
 .cat-badge {
@@ -248,10 +249,9 @@ body {
   margin-top: 10px;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 3;      /* максимум 3 строки, дальше — многоточие */
+  -webkit-line-clamp: 2;   /* с чуть более тесным лимитом — под реальную высоту квадрата */
   -webkit-box-orient: vertical;
 }
-
 .cat-bottom-row {
   display: flex;
   justify-content: flex-end;
