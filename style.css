@@ -180,14 +180,14 @@ body {
 
 #category-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(120px, 150px));
+  grid-template-columns: repeat(2, minmax(0, 150px));
   gap: 30px;
   justify-content: center;
   max-height: calc(100vh - 72px - 130px);
   overflow-y: auto;
   overflow-x: hidden;
   padding-bottom: 40px;
-  padding-right: 14px;   /* ← вернули запас под скроллбар */
+  padding-right: 14px;
   scrollbar-width: thin;
   scrollbar-color: #C5CAE0 transparent;
 }
@@ -330,15 +330,13 @@ body {
 .nav-highlight {
   position: absolute;
   top: 3px;
-  left: 3px;
-  width: 100px;
+  left: 0;
   height: 54px;
   background: #FFCB6B;
   border-radius: 27px;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, width 0.3s ease;
   z-index: 0;
 }
-
 .nav-btn.active { color: #32427A; }
 
 .nav-btn svg {
