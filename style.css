@@ -45,13 +45,26 @@ body {
 
 /* ===== SCREENS ===== */
 .screen {
-  padding: 72px 30px 130px;
+  padding: 72px clamp(16px, 6vw, 30px) 130px;
   height: 100vh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   box-sizing: border-box;
+  scrollbar-width: thin;              /* Firefox */
+  scrollbar-color: #C5CAE0 transparent;
 }
+.screen::-webkit-scrollbar {
+  width: 4px;                          /* Chrome/Safari */
+}
+.screen::-webkit-scrollbar-track {
+  background: transparent;
+}
+.screen::-webkit-scrollbar-thumb {
+  background: #C5CAE0;
+  border-radius: 3px;
+}
+
 .main-flow {
   display: flex;
   flex-direction: column;
@@ -61,7 +74,7 @@ body {
 
 /* ===== MAIN SCREEN ===== */
 .greeting-card {
-  width: 330px;
+  width: min(330px, 100%);
   margin: 0 auto 20px;
   background: #465790;
   border-radius: 25px;
@@ -75,7 +88,7 @@ body {
 }
 
 .resolution-card {
-  width: 330px;
+  width: min(330px, 100%);
   margin: 0 auto;
   background: #465790;
   border-radius: 25px;
@@ -90,12 +103,18 @@ body {
 
 .resolution-text-wrap {
   position: relative;
-  width: 194px;
+  width: 100%;
+  max-width: 194px;
   margin: 0 auto;
   max-height: 220px;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 10px;
   padding-bottom: 20px;
+  scrollbar-width: none;           /* Firefox */
+}
+.resolution-text-wrap::-webkit-scrollbar {
+  display: none;                   /* Chrome/Safari */
 }
 
 #main-resolution {
@@ -128,7 +147,7 @@ body {
 .scroll-thumb {
   position: absolute;
   width: 3px;
-  background: #FFCB6B;
+  background: #C5CAE0;
   border-radius: 3px;
   opacity: 0;
   transition: opacity 0.3s;
@@ -161,16 +180,26 @@ body {
 
 #category-grid {
   display: grid;
-  grid-template-columns: 150px 150px;
+  grid-template-columns: repeat(2, minmax(120px, 150px));
   gap: 30px;
   justify-content: center;
   max-height: calc(100vh - 72px - 130px);
   overflow-y: auto;
   overflow-x: hidden;
   padding-bottom: 40px;
-  padding-right: 10px;
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: #C5CAE0 transparent;
+}
+#category-grid::-webkit-scrollbar {
+  width: 4px;
+}
+#category-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+#category-grid::-webkit-scrollbar-thumb {
+  background: #C5CAE0;
+  border-radius: 3px;
 }
 
 .grid-fade {
@@ -178,15 +207,15 @@ body {
   bottom: 110px;
   left: 50%;
   transform: translateX(-50%);
-  width: 390px;
+  width: min(390px, 100%);
   height: 60px;
   background: linear-gradient(to bottom, transparent, #32427A);
   pointer-events: none;
 }
 
 .category-card {
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   padding: 10px;
   background: #465790;
   border-radius: 25px;
@@ -222,6 +251,7 @@ body {
 .cat-bottom-row {
   display: flex;
   justify-content: flex-end;
+  margin-top: auto;
 }
 
 /* ===== LIKED SCREEN ===== */
@@ -269,7 +299,7 @@ body {
   bottom: 50px;
   left: 50%;
   transform: translateX(-50%);
-  width: 330px;
+  width: min(330px, calc(100% - 60px));
   height: 60px;
   padding: 3px;
   background: #3D4D87;
@@ -277,6 +307,7 @@ body {
   display: flex;
   gap: 12px;
   align-items: center;
+  justify-content: center;
   z-index: 10;
 }
 
@@ -322,68 +353,4 @@ html, body {
   margin: 0;
   overflow: hidden;
   overscroll-behavior: none;
-}
-  z-index: 2;
-}
-.cat-bottom-row { margin-top: auto; }
-.resolution-text-wrap {
-  position: relative;
-  width: 194px;
-  margin: 0 auto;
-  max-height: 220px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 10px;
-  padding-bottom: 20px;
-  scrollbar-width: none;           /* Firefox */
-}
-.resolution-text-wrap::-webkit-scrollbar {
-  display: none;                   /* Chrome/Safari */
-}
-
-.scroll-thumb {
-  position: absolute;
-  width: 3px;
-  background: #C5CAE0;             /* было #FFCB6B */
-  border-radius: 3px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-#category-grid {
-  display: grid;
-  grid-template-columns: 150px 150px;
-  gap: 30px;
-  justify-content: center;
-  max-height: calc(100vh - 72px - 130px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-bottom: 40px;
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  scrollbar-color: #C5CAE0 transparent;
-}
-#category-grid::-webkit-scrollbar {
-  width: 4px;
-}
-#category-grid::-webkit-scrollbar-track {
-  background: transparent;
-}
-#category-grid::-webkit-scrollbar-thumb {
-  background: #C5CAE0;
-  border-radius: 3px;
-}
-.screen {
-  scrollbar-width: thin;              /* Firefox */
-  scrollbar-color: #C5CAE0 transparent;
-}
-.screen::-webkit-scrollbar {
-  width: 4px;                          /* Chrome/Safari */
-}
-.screen::-webkit-scrollbar-track {
-  background: transparent;
-}
-.screen::-webkit-scrollbar-thumb {
-  background: #C5CAE0;
-  border-radius: 3px;
 }
