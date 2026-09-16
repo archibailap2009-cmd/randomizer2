@@ -113,6 +113,10 @@ function moveHighlight(btn) {
 navBtns.forEach(btn => {
   btn.addEventListener("click", () => showScreen(btn.dataset.screen));
 });
+window.addEventListener("resize", () => {
+  const activeBtn = document.querySelector(".nav-btn.active");
+  if (activeBtn) moveHighlight(activeBtn);
+});
 
 // ==== ГЛАВНЫЙ ЭКРАН ====
 function updateLikeIcon() {
