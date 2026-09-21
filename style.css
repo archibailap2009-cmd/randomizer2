@@ -151,7 +151,6 @@ body {
   border-radius: 3px;
   opacity: 0;
   transition: opacity 0.3s;
-}
 
 .scroll-thumb.visible { opacity: 1; }
 
@@ -187,19 +186,13 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   padding-bottom: 40px;
-  scrollbar-width: none;           /* Firefox */
+  padding-right: 10px;   /* ← зазор между карточками и полоской */
+  scrollbar-width: thin;
+  scrollbar-color: #C5CAE0 transparent;
 }
-#category-grid::-webkit-scrollbar {
-  display: none;                   /* Chrome/Safari */
-}
-}
-#category-grid::-webkit-scrollbar-track {
-  background: transparent;
-}
-#category-grid::-webkit-scrollbar-thumb {
-  background: #C5CAE0;
-  border-radius: 3px;
-}
+#category-grid::-webkit-scrollbar { width: 4px; }
+#category-grid::-webkit-scrollbar-track { background: transparent; }
+#category-grid::-webkit-scrollbar-thumb { background: #C5CAE0; border-radius: 3px; }
 
 .grid-fade {
   position: fixed;
@@ -296,6 +289,27 @@ body {
 }
 
 .unlike-btn svg { width: 20px; height: 20px; }
+#liked-screen.screen {
+  overflow: hidden;           /* сам экран больше не скроллится */
+  display: flex;
+  flex-direction: column;
+}
+
+.liked-header { flex: none; }
+
+#liked-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: min(330px, 100%);
+  margin: 0 auto;
+  padding-right: 10px;        /* тот же зазор, что и в категориях */
+  scrollbar-width: thin;
+  scrollbar-color: #C5CAE0 transparent;
+}
+#liked-list::-webkit-scrollbar { width: 4px; }
+#liked-list::-webkit-scrollbar-track { background: transparent; }
+#liked-list::-webkit-scrollbar-thumb { background: #C5CAE0; border-radius: 3px; }
 
 /* ===== BOTTOM NAV ===== */
 #bottom-nav {
