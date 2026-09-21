@@ -188,20 +188,23 @@ body {
 }
 
 #category-grid {
+  --gap: clamp(14px, 5vw, 30px);
+  /* ширина экрана − боковые отступы − padding-right − gap, пополам, но не больше 150 */
+  --cell: min(150px, calc((100vw - 2 * var(--side-pad) - 10px - var(--gap)) / 2));
+
   flex: 1 1 auto;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 150px));
-  gap: 30px;
+  grid-template-columns: repeat(2, var(--cell));
+  grid-auto-rows: var(--cell);
+  gap: var(--gap);
   justify-content: center;
   align-content: start;
-  align-items: start;   /* ← добавить */
   overflow-y: auto;
   overflow-x: hidden;
   padding-bottom: 40px;
   padding-right: 10px;
   scrollbar-width: thin;
   scrollbar-color: #C5CAE0 transparent;
-  grid-auto-rows: 150px;
 }
 #category-grid::-webkit-scrollbar { width: 4px; }
 #category-grid::-webkit-scrollbar-track { background: transparent; }
@@ -220,12 +223,11 @@ body {
 
 .category-card {
   width: 100%;
-  height: 100%; 
-  aspect-ratio: 1 / 1;
-  min-height: 0;      /* ← убирает скрытый "пол" по контенту */
-  padding: 10px;
+  height: 100%;
+  min-height: 0;
+  padding: calc(var(--cell) * 0.067);
   background: #465790;
-  border-radius: 25px;
+  border-radius: calc(var(--cell) * 0.167);
   border: none;
   color: white;
   cursor: pointer;
@@ -237,8 +239,8 @@ body {
 }
 
 .cat-badge {
-  width: 30px;
-  height: 30px;
+  width: calc(var(--cell) * 0.2);
+  height: calc(var(--cell) * 0.2);
   border-radius: 50%;
   background: #3D4D87;
   display: flex;
@@ -246,17 +248,18 @@ body {
   justify-content: center;
   flex-shrink: 0;
 }
-
-.cat-badge svg { width: 18px; height: 18px; }
-
+.cat-badge svg {
+  width: calc(var(--cell) * 0.12);
+  height: calc(var(--cell) * 0.12);
+}
 .cat-name {
-  font-size: 16px;
+  font-size: calc(var(--cell) * 0.107);
   line-height: 1.2;
   text-align: left;
-  margin-top: 10px;
+  margin-top: calc(var(--cell) * 0.067);
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;   /* с чуть более тесным лимитом — под реальную высоту квадрата */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 .cat-bottom-row {
