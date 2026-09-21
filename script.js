@@ -144,8 +144,9 @@ function checkScrollIndicator() {
 }
 
 function updateScrollThumb() {
+  const track = textWrap.querySelector(".scroll-track");
+  const trackHeight = track.clientHeight;
   const ratio = textWrap.clientHeight / textWrap.scrollHeight;
-  const trackHeight = textWrap.clientHeight;
   scrollThumb.style.height = (ratio * trackHeight) + "px";
   scrollThumb.style.top = (textWrap.scrollTop / textWrap.scrollHeight * trackHeight) + "px";
   scrollThumb.classList.add("visible");
