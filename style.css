@@ -189,8 +189,9 @@ body {
 
 #category-grid {
   --gap: clamp(14px, 5vw, 30px);
-  /* ширина экрана − боковые отступы − padding-right − gap, пополам, но не больше 150 */
-  --cell: min(150px, calc((100vw - 2 * var(--side-pad) - 10px - var(--gap)) / 2));
+  --grid-pad: 14px;
+  --sb: 4px;
+  --cell: min(150px, calc((min(100vw, 390px) - 2 * var(--side-pad) - 2 * var(--grid-pad) - var(--sb) - var(--gap)) / 2));
 
   flex: 1 1 auto;
   display: grid;
@@ -202,8 +203,8 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   padding-bottom: 40px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: var(--grid-pad);
+  padding-right: var(--grid-pad);
   scrollbar-width: thin;
   scrollbar-color: #C5CAE0 transparent;
 }
