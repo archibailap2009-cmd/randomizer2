@@ -409,7 +409,7 @@ const categories = {
     { text: "ЭП сожалеет о тенденции дебатного сообщества возвращаться к офлайн-мероприятиям.", infoslide: "В ответ на пандемию COVID-19 дебатное сообщество перевело свою деятельность в онлайн: тренировки, коучинг и турниры, включая крупные WUDC, ABP и EUDC, проводились на платформах вроде Zoom и Discord. После окончания пандемии дебаты начали возвращаться в офлайн-формат, хотя онлайн-дебаты полностью не исчезли." },
     { text: "ЭП поддерживает предложение Paramount о покупке Warner Bros.", infoslide: "Warner Bros., включающая DC, HBO, Cartoon Network и CNN, недавно была разделена на две компании: одна контролирует киностудии и права на фильмы, другая — кабельные телеканалы. Netflix, владеющий крупными франшизами вроде Stranger Things, Squid Game и Bridgerton, стремится приобрести компанию, контролирующую киностудии и права на фильмы, чтобы расширить библиотеку контента и развивать искусственный интеллект и видеоигры. Paramount, владеющая CBS, Nickelodeon и Skydance, стремится приобрести и киностудии с правами на фильмы, и кабельные телеканалы, что сделало бы её крупнейшим игроком традиционного телевидения и новостей." }
   ],
-  categories["English"] = [
+  "English": [
   { text: "This House believes single-sex schools are good for education.", infoslide: "" },
   { text: "This House would abolish standardized testing.", infoslide: "" },
   { text: "This House would ban homework in primary schools.", infoslide: "" },
