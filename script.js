@@ -25,6 +25,10 @@ const diceIconSvg = `<svg viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.o
 
 const navHeartIconSvg = `<svg viewBox="0 0 27 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.5 3.8387C11.0008 0.818298 6.82469 -0.115138 3.69338 2.65065C0.562054 5.41643 0.121207 10.0406 2.58025 13.3118C4.62478 16.0314 10.8122 21.7676 12.8401 23.6241C13.067 23.8318 13.1804 23.9357 13.3128 23.9764C13.4282 24.012 13.5546 24.012 13.6702 23.9764C13.8025 23.9357 13.9158 23.8318 14.1428 23.6241C16.1707 21.7676 22.3581 16.0314 24.4027 13.3118C26.8617 10.0406 26.4746 5.38734 23.2895 2.65065C20.1043 -0.0860429 15.9992 0.818298 13.5 3.8387Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
+const listIconSvg = `<svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="7" r="1.5" fill="currentColor"/><circle cx="5" cy="15" r="1.5" fill="currentColor"/><circle cx="5" cy="23" r="1.5" fill="currentColor"/><path d="M12 7H26M12 15H26M12 23H26" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+
+const chevronSvg = `<svg viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L7 7L13 1" stroke="#FFCB6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
 const arrowIconSvg = `<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.292893 13.7279C-0.0976311 14.1184 -0.0976311 14.7516 0.292893 15.1421C0.683418 15.5327 1.31658 15.5327 1.70711 15.1421L1 14.435L0.292893 13.7279ZM15.435 0.999999C15.435 0.447714 14.9873 -7.97241e-07 14.435 -1.05012e-06L5.43503 -2.49332e-07C4.88274 -5.86507e-07 4.43503 0.447715 4.43503 0.999999C4.43503 1.55228 4.88274 2 5.43503 2L13.435 2L13.435 10C13.435 10.5523 13.8827 11 14.435 11C14.9873 11 15.435 10.5523 15.435 10L15.435 0.999999ZM1 14.435L1.70711 15.1421L15.1421 1.70711L14.435 0.999999L13.7279 0.292893L0.292893 13.7279L1 14.435Z" fill="#FFCB6B"/></svg>`;
 
 const categoryIcons = {
@@ -76,12 +80,14 @@ const scrollThumb = document.getElementById("scroll-thumb");
 const textWrap = document.querySelector(".resolution-text-wrap");
 const categoryGrid = document.getElementById("category-grid");
 const likedList = document.getElementById("liked-list");
+const allList = document.getElementById("all-list");
 const navHighlight = document.getElementById("nav-highlight");
 const navBtns = document.querySelectorAll(".nav-btn");
 
 document.querySelector(".nav-icon-grid").innerHTML = gridIconSvg;
 document.querySelector(".nav-icon-dice").innerHTML = diceIconSvg;
 document.querySelector(".nav-icon-heart").innerHTML = navHeartIconSvg;
+document.querySelector(".nav-icon-list").innerHTML = listIconSvg;
 anotherIcon.innerHTML = refreshIconSvg;
 
 // ==== ПОКАЗ ЭКРАНА ====
@@ -101,6 +107,7 @@ function showScreen(id) {
 
   if (id === "categories-screen") renderCategories();
   if (id === "liked-screen") renderLiked();
+  if (id === "all-screen") renderAll();
 }
 
 function moveHighlight(btn) {
@@ -214,7 +221,70 @@ function renderCategories() {
     categoryGrid.appendChild(card);
   }
 }
+// ==== ЭКРАН «ВСЕ РЕЗОЛЮЦИИ» ====
+const PAGE_SIZE = 10;
 
+function renderAll() {
+  allList.innerHTML = "";
+
+  for (const key in categories) {
+    const list = categories[key];
+    let shown = 0;
+
+    const card = document.createElement("div");
+    card.className = "acc-card";
+    card.innerHTML = `
+      <button class="acc-head" aria-expanded="false">
+        <span class="acc-badge">${categoryIcons[key] || ""}</span>
+        <span class="acc-title"></span>
+        <span class="acc-badge acc-chevron">${chevronSvg}</span>
+      </button>
+      <div class="acc-body">
+        <div class="acc-inner">
+          <div class="acc-pad">
+            <div class="acc-items"></div>
+            <button class="acc-more hidden"></button>
+          </div>
+        </div>
+      </div>
+    `;
+    card.querySelector(".acc-title").textContent = key;
+
+    const head = card.querySelector(".acc-head");
+    const items = card.querySelector(".acc-items");
+    const more = card.querySelector(".acc-more");
+    items.style.cssText = "display:flex;flex-direction:column;gap:10px;";
+
+    function showMore() {
+      const next = list.slice(shown, shown + PAGE_SIZE);
+      next.forEach(r => {
+        const div = document.createElement("div");
+        div.className = "acc-item";
+        div.textContent = r.text;
+        items.appendChild(div);
+      });
+      shown += next.length;
+
+      const left = list.length - shown;
+      if (left > 0) {
+        more.innerHTML = `<span>Показать ещё ${Math.min(PAGE_SIZE, left)}</span>${chevronSvg}`;
+        more.classList.remove("hidden");
+      } else {
+        more.classList.add("hidden");
+      }
+    }
+
+    head.addEventListener("click", () => {
+      const opening = !card.classList.contains("open");
+      card.classList.toggle("open", opening);
+      head.setAttribute("aria-expanded", opening);
+      if (opening && shown === 0) showMore();   // резолюции рисуются только при первом открытии
+    });
+    more.addEventListener("click", showMore);
+
+    allList.appendChild(card);
+  }
+}
 // ==== ЭКРАН ЛАЙКНУТЫХ ====
 function renderLiked() {
   likedList.innerHTML = "";
