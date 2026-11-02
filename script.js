@@ -27,8 +27,39 @@ const navHeartIconSvg = `<svg viewBox="0 0 27 25" fill="none" xmlns="http://www.
 
 const listIconSvg = `<svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="7" r="1.5" fill="currentColor"/><circle cx="5" cy="15" r="1.5" fill="currentColor"/><circle cx="5" cy="23" r="1.5" fill="currentColor"/><path d="M12 7H26M12 15H26M12 23H26" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
 
-const chevronSvg = `<svg viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L7 7L13 1" stroke="#FFCB6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const chevronSvg = `<svg viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
+const categoryColors = {
+  "Интим и любовь": "#FF6B8A",
+  "Феминизм": "#D94FA6",
+  "LGBTQ+": "#FFCB6B",
+  "Наркотики": "#A66BFF",
+  "Религия": "#E6C27A",
+  "Политика": "#5BB5FF",
+  "Экономика": "#2FD08B",
+  "Мораль": "#E8EEF9",
+  "Cursed": "#9CFF4D",
+  "Право и преступность": "#FF6A4D",
+  "Образование": "#8F7CFF",
+  "Наука и технологии": "#2CC4D6",
+  "Экология": "#6FD44A",
+  "Спорт": "#FF8A3D",
+  "Социальные вопросы": "#FF9E7A",
+  "English": "#9DB4FF"
+};
+
+const allOrder = [
+  "Интим и любовь", "Политика", "Спорт", "Экология", "Феминизм",
+  "Религия", "Наука и технологии", "Право и преступность", "Образование",
+  "Cursed", "LGBTQ+", "Экономика", "Наркотики", "Социальные вопросы",
+  "Мораль", "English"
+];
+
+function tintedIcon(key) {
+  const svg = categoryIcons[key] || "";
+  const color = categoryColors[key] || "#FFCB6B";
+  return svg.replaceAll('"black"', `"${color}"`);
+}
 const arrowIconSvg = `<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.292893 13.7279C-0.0976311 14.1184 -0.0976311 14.7516 0.292893 15.1421C0.683418 15.5327 1.31658 15.5327 1.70711 15.1421L1 14.435L0.292893 13.7279ZM15.435 0.999999C15.435 0.447714 14.9873 -7.97241e-07 14.435 -1.05012e-06L5.43503 -2.49332e-07C4.88274 -5.86507e-07 4.43503 0.447715 4.43503 0.999999C4.43503 1.55228 4.88274 2 5.43503 2L13.435 2L13.435 10C13.435 10.5523 13.8827 11 14.435 11C14.9873 11 15.435 10.5523 15.435 10L15.435 0.999999ZM1 14.435L1.70711 15.1421L15.1421 1.70711L14.435 0.999999L13.7279 0.292893L0.292893 13.7279L1 14.435Z" fill="#FFCB6B"/></svg>`;
 
 const categoryIcons = {
