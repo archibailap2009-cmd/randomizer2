@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Randomizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600&family=Rubik:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -28,6 +31,7 @@
   <div class="scroll-track"><div class="scroll-thumb" id="scroll-thumb"></div></div>
 </div>
         <div class="card-bottom-icons">
+          <div class="card-cat" id="card-cat"></div>
           <button class="icon-btn" id="another-btn"><span id="another-icon"></span></button>
         </div>
       </div>
@@ -37,11 +41,11 @@
   <div id="category-grid"></div>
 </div>
        <div id="all-screen" class="screen hidden">
-      <div class="all-header"><h2>Все резолюции:</h2></div>
+      <div class="all-header"><h2>Все резолюции:</h2><p class="screen-sub" id="all-sub"></p></div>
       <div id="all-list"></div>
     </div>
     <div id="liked-screen" class="screen hidden">
-      <div class="liked-header"><h2>Мои резолюции:</h2></div>
+      <div class="liked-header"><h2>Мои резолюции:</h2><p class="screen-sub" id="liked-sub"></p></div>
       <div id="liked-list"></div>
     </div>
     <div id="bottom-nav">
