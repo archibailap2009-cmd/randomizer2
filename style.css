@@ -115,7 +115,7 @@ body {
 .resolution-text-wrap {
   position: relative;
   width: 100%;
-  max-width: 194px;
+  max-width: 250px;
   margin: 0 auto;
   max-height: 220px;
   overflow-y: auto;
@@ -136,7 +136,7 @@ body {
   margin: 0;
   text-align: center;
   overflow-wrap: break-word;
-  word-break: break-word;
+  hyphens: auto;
 }
 
 .info-slide-text {
@@ -337,11 +337,10 @@ body {
 
 .acc-like {
   flex: none;
-  align-self: flex-start;
+  margin-left: auto;      /* прижимает к правому краю карточки */
   width: 24px;
   height: 24px;
   padding: 0;
-  margin: -2px -4px 0 0;
   background: transparent;
   border: none;
   cursor: pointer;
