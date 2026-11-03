@@ -87,6 +87,12 @@ function tintedIcon(key) {
   return svg.replaceAll('"black"', `"${color}"`);
 }
 
+// Стрелка на карточке категории — в цвет категории
+function tintedArrow(key) {
+  const color = categoryColors[key] || "#FFCB6B";
+  return arrowIconSvg.replaceAll('"#FFCB6B"', `"${color}"`);
+}
+
 // ==== СОСТОЯНИЕ ====
 let likedResolutions = JSON.parse(localStorage.getItem("liked") || "[]");
 let currentResolutionText = "";
@@ -244,10 +250,12 @@ function renderCategories() {
     const card = document.createElement("button");
     card.className = "category-card";
     card.innerHTML = `
-      <div class="cat-badge">${categoryIcons[key] || ""}</div>
+      <div class="cat-badge">${tintedIcon(key)}</div>
       <div class="cat-name">${key}</div>
-      <div class="cat-bottom-row"><div class="cat-badge">${arrowIconSvg}</div></div>
+      <div class="cat-bottom-row"><div class="cat-badge">${tintedArrow(key)}</div></div>
     `;
+    card.style.setProperty("--c", categoryColors[key] || "#FFCB6B");
+    if (key === "LGBTQ+") card.classList.add("rainbow");
     card.addEventListener("click", () => {
       const list = categories[key];
       currentPool = list;
