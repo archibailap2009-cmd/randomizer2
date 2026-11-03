@@ -93,6 +93,32 @@ function tintedArrow(key) {
   return arrowIconSvg.replaceAll('"#FFCB6B"', `"${color}"`);
 }
 
+// Склонение: 1 резолюция, 2 резолюции, 5 резолюций
+function plural(n, one, few, many) {
+  const m10 = n % 10, m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return one;
+  if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return few;
+  return many;
+}
+function countLabel(n) {
+  return `${n} ${plural(n, "резолюция", "резолюции", "резолюций")}`;
+}
+
+// Маленькая «пружинка» для сердечка
+function pop(el) {
+  el.classList.remove("pop");
+  void el.offsetWidth;
+  el.classList.add("pop");
+}
+
+// Находим категорию резолюции по тексту (для пометки на экране лайков)
+function categoryOf(text) {
+  for (const key in categories) {
+    if (categories[key].some(r => r.text === text)) return key;
+  }
+  return null;
+}
+
 // ==== СОСТОЯНИЕ ====
 let likedResolutions = JSON.parse(localStorage.getItem("liked") || "[]");
 let currentResolutionText = "";
@@ -120,6 +146,8 @@ const copyIcon = document.getElementById("copy-icon");
 const anotherIcon = document.getElementById("another-icon");
 const scrollThumb = document.getElementById("scroll-thumb");
 const textWrap = document.querySelector(".resolution-text-wrap");
+const resCard = document.querySelector(".resolution-card");
+const cardCat = document.getElementById("card-cat");
 const categoryGrid = document.getElementById("category-grid");
 const likedList = document.getElementById("liked-list");
 const allList = document.getElementById("all-list");
@@ -166,12 +194,34 @@ window.addEventListener("resize", () => {
 });
 
 // ==== ГЛАВНЫЙ ЭКРАН ====
+function toggleLike(text) {
+  const idx = likedResolutions.indexOf(text);
+  if (idx === -1) likedResolutions.push(text);
+  else likedResolutions.splice(idx, 1);
+  saveLikes();
+  if (currentResolutionText === text) updateLikeIcon();
+  return idx === -1; // true = теперь лайкнуто
+}
+
 function updateLikeIcon() {
   likeIcon.innerHTML = likedResolutions.includes(currentResolutionText) ? heartFilled : heartOutline;
 }
 
 function displayPick(pick) {
   currentResolutionText = pick.text;
+
+  // карточка окрашивается в цвет категории + пометка категории внизу
+  const key = categoryOf(pick.text);
+  resCard.style.setProperty("--c", (key && categoryColors[key]) || "#FFCB6B");
+  if (key) {
+    cardCat.innerHTML = `<span class="liked-cat-icon">${tintedIcon(key)}</span><span class="card-cat-name"></span>`;
+    cardCat.querySelector(".card-cat-name").textContent = key;
+  } else {
+    cardCat.innerHTML = "";
+  }
+  resCard.classList.remove("swap");
+  void resCard.offsetWidth;          // перезапуск анимации
+  resCard.classList.add("swap");
   mainResolutionEl.textContent = pick.text;
   mainInfoslideEl.textContent = pick.infoslide || "";
   copyIcon.innerHTML = copyIconSvg;
@@ -218,14 +268,7 @@ document.getElementById("copy-btn").addEventListener("click", () => {
 document.getElementById("another-btn").addEventListener("click", showMainResolution);
 
 likeBtn.addEventListener("click", () => {
-  const idx = likedResolutions.indexOf(currentResolutionText);
-  if (idx === -1) {
-    likedResolutions.push(currentResolutionText);
-  } else {
-    likedResolutions.splice(idx, 1);
-  }
-  saveLikes();
-  updateLikeIcon();
+  if (toggleLike(currentResolutionText)) pop(likeIcon);
 });
 
 // ==== ЭКРАН КАТЕГОРИЙ ====
@@ -237,7 +280,7 @@ function renderCategories() {
   allCard.innerHTML = `
     <div class="cat-badge">${diceIconSvg}</div>
     <div class="cat-name">Все</div>
-    <div class="cat-bottom-row"><div class="cat-badge">${arrowIconSvg}</div></div>
+    <div class="cat-bottom-row"><span class="cat-count">${countLabel(getAllResolutions().length)}</span><div class="cat-badge">${arrowIconSvg}</div></div>
   `;
   allCard.addEventListener("click", () => {
     currentPool = null;
@@ -252,7 +295,7 @@ function renderCategories() {
     card.innerHTML = `
       <div class="cat-badge">${tintedIcon(key)}</div>
       <div class="cat-name">${key}</div>
-      <div class="cat-bottom-row"><div class="cat-badge">${tintedArrow(key)}</div></div>
+      <div class="cat-bottom-row"><span class="cat-count">${countLabel(categories[key].length)}</span><div class="cat-badge">${tintedArrow(key)}</div></div>
     `;
     card.style.setProperty("--c", categoryColors[key] || "#FFCB6B");
     if (key === "LGBTQ+") card.classList.add("rainbow");
@@ -271,6 +314,9 @@ const PAGE_SIZE = 10; // сколько резолюций показывать 
 
 function renderAll() {
   allList.innerHTML = "";
+  const catCount = Object.keys(categories).length;
+  document.getElementById("all-sub").textContent =
+    `${countLabel(getAllResolutions().length)} · ${catCount} ${plural(catCount, "категория", "категории", "категорий")}`;
 
   // сначала категории в нашем порядке, потом любые новые, которых нет в allOrder
   const keys = [
@@ -316,8 +362,18 @@ function renderAll() {
         num.className = "acc-num";
         num.textContent = String(shown + i + 1).padStart(2, "0");
         const txt = document.createElement("span");
+        txt.className = "acc-text";
         txt.textContent = r.text;
-        div.append(num, txt);
+        const like = document.createElement("button");
+        like.className = "acc-like";
+        like.setAttribute("aria-label", "Лайк");
+        like.innerHTML = likedResolutions.includes(r.text) ? heartFilled : heartOutline;
+        like.addEventListener("click", () => {
+          const liked = toggleLike(r.text);
+          like.innerHTML = liked ? heartFilled : heartOutline;
+          if (liked) pop(like);
+        });
+        div.append(num, txt, like);
         items.appendChild(div);
       });
       shown += next.length;
@@ -346,23 +402,52 @@ function renderAll() {
 // ==== ЭКРАН ЛАЙКНУТЫХ ====
 function renderLiked() {
   likedList.innerHTML = "";
+  document.getElementById("liked-sub").textContent = likedResolutions.length === 0
+    ? "пока пусто"
+    : `лайкнуто: ${likedResolutions.length} из ${getAllResolutions().length}`;
   if (likedResolutions.length === 0) {
-    likedList.innerHTML = "<p class='empty-liked'>Пока ничего не лайкнуто</p>";
+    likedList.innerHTML = `
+      <div class="empty-state">
+        ${diceIconSvg}
+        <p class="empty-liked">Пока ничего не лайкнуто</p>
+        <p class="hint">Нажми на сердечко у резолюции, и она появится здесь</p>
+      </div>`;
     return;
   }
-  likedResolutions.forEach(text => {
+  likedResolutions.forEach((text, i) => {
+    const key = categoryOf(text);
     const item = document.createElement("div");
     item.className = "liked-item";
-    item.innerHTML = `
-      <p>${text}</p>
-      <button class="unlike-btn">${heartFilled}</button>
-    `;
-    item.querySelector(".unlike-btn").addEventListener("click", () => {
-      likedResolutions = likedResolutions.filter(t => t !== text);
-      saveLikes();
-      if (currentResolutionText === text) updateLikeIcon();
+    item.style.setProperty("--c", (key && categoryColors[key]) || "#FFCB6B");
+
+    const num = document.createElement("span");
+    num.className = "acc-num";
+    num.textContent = String(i + 1).padStart(2, "0");
+
+    const body = document.createElement("div");
+    body.className = "liked-body";
+    const p = document.createElement("p");
+    p.textContent = text;
+    body.appendChild(p);
+
+    if (key) {
+      const cat = document.createElement("div");
+      cat.className = "liked-cat";
+      cat.innerHTML = `<span class="liked-cat-icon">${tintedIcon(key)}</span><span class="liked-cat-name"></span>`;
+      cat.querySelector(".liked-cat-name").textContent = key;
+      body.appendChild(cat);
+    }
+
+    const btn = document.createElement("button");
+    btn.className = "unlike-btn";
+    btn.setAttribute("aria-label", "Убрать лайк");
+    btn.innerHTML = heartFilled;
+    btn.addEventListener("click", () => {
+      toggleLike(text);
       renderLiked();
     });
+
+    item.append(num, body, btn);
     likedList.appendChild(item);
   });
 }
