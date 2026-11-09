@@ -761,4 +761,4 @@ button { font-family: inherit; }
 .liked-item { animation: item-in 0.35s ease backwards; }
 
 /* запас снизу, чтобы последняя лайкнутая карточка могла уйти от края */
-#liked-list { padding-bottom: 40px; }
+#all-list, #liked-list { padding-bottom: 120px; }
