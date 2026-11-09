@@ -461,3 +461,42 @@ window.addEventListener("load", () => {
     showScreen("main-screen");
   }, 1200);
 });
+const FADE_ZONE = 90;     // px, с какого расстояния от края начинается эффект
+const MIN_SCALE = 0.88;   // до какого размера уменьшается
+const MIN_OPACITY = 0.45; // до какой прозрачности темнеет
+
+// ЗАМЕНИ на свои: что скроллится и какие панели сверху/снизу
+const scroller = window; // или document.querySelector('.твой-контейнер')
+const navSelector = '.bottom-nav';
+const topSelector = '.top-bar'; // если верхней панели нет, оставь как есть, тогда край = верх экрана
+
+const clamp01 = v => Math.min(1, Math.max(0, v));
+
+function updateScrollFx() {
+  const nav = document.querySelector(navSelector);
+  const top = document.querySelector(topSelector);
+  const bottomEdge = nav ? nav.getBoundingClientRect().top : window.innerHeight;
+  const topEdge = top ? top.getBoundingClientRect().bottom : 0;
+
+  document.querySelectorAll('.fx').forEach(el => {
+    const r = el.getBoundingClientRect();
+    // у нижнего края смотрим на верх элемента, у верхнего края на его низ
+    const nearBottom = clamp01((r.top - (bottomEdge - FADE_ZONE)) / FADE_ZONE);
+    const nearTop = clamp01(((topEdge + FADE_ZONE) - r.bottom) / FADE_ZONE);
+    const p = Math.max(nearBottom, nearTop); // 0..1
+
+    el.style.transform = `scale(${1 - (1 - MIN_SCALE) * p})`;
+    el.style.opacity = 1 - (1 - MIN_OPACITY) * p;
+  });
+}
+
+let ticking = false;
+function onScroll() {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => { updateScrollFx(); ticking = false; });
+}
+
+scroller.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('resize', onScroll);
+updateScrollFx(); // один раз при загрузке
