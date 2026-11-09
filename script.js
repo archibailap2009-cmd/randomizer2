@@ -461,11 +461,10 @@ window.addEventListener("load", () => {
     showScreen("main-screen");
   }, 1200);
 });
-// ==== ЭФФЕКТ ПРИ СКРОЛЛЕ: карточки уменьшаются и тускнеют у верхнего и нижнего края ====
-const FX_ZONE = 80;          // px от края, с которых начинается эффект
-const FX_MIN_SCALE = 0.88;   // до какого размера уменьшается
-const FX_MIN_OPACITY = 0.4;  // до какой прозрачности тускнеет
-
+const FX_ZONE = 130;         
+const FX_INSET = 30;         
+const FX_MIN_SCALE = 0.8;    
+const FX_MIN_OPACITY = 0.25; 
 const FX_LISTS = [
   { scroller: "#category-grid", items: ".category-card" },
   { scroller: "#all-list",      items: ".acc-card" },
@@ -487,8 +486,8 @@ function updateScrollFx() {
       const top = mid - el.offsetHeight / 2;
       const bottom = mid + el.offsetHeight / 2;
 
-      const nearBottom = fxClamp((top - (area.bottom - FX_ZONE)) / FX_ZONE);
-      const nearTop = fxClamp(((area.top + FX_ZONE) - bottom) / FX_ZONE);
+      const nearBottom = fxClamp((top - (area.bottom - FX_INSET - FX_ZONE)) / FX_ZONE);
+      const nearTop = fxClamp(((area.top + FX_INSET + FX_ZONE) - bottom) / FX_ZONE);
       const p = Math.max(nearBottom, nearTop);   // 0 = норма, 1 = у самого края
 
       el.style.scale = 1 - (1 - FX_MIN_SCALE) * p;
