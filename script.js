@@ -461,42 +461,62 @@ window.addEventListener("load", () => {
     showScreen("main-screen");
   }, 1200);
 });
-const FADE_ZONE = 90;     // px, с какого расстояния от края начинается эффект
-const MIN_SCALE = 0.88;   // до какого размера уменьшается
-const MIN_OPACITY = 0.45; // до какой прозрачности темнеет
+// ==== ЭФФЕКТ ПРИ СКРОЛЛЕ: карточки уменьшаются и тускнеют у верхнего и нижнего края ====
+const FX_ZONE = 80;          // px от края, с которых начинается эффект
+const FX_MIN_SCALE = 0.88;   // до какого размера уменьшается
+const FX_MIN_OPACITY = 0.4;  // до какой прозрачности тускнеет
 
-// ЗАМЕНИ на свои: что скроллится и какие панели сверху/снизу
-const scroller = window; // или document.querySelector('.твой-контейнер')
-const navSelector = '.bottom-nav';
-const topSelector = '.top-bar'; // если верхней панели нет, оставь как есть, тогда край = верх экрана
+const FX_LISTS = [
+  { scroller: "#category-grid", items: ".category-card" },
+  { scroller: "#all-list",      items: ".acc-card" },
+  { scroller: "#liked-list",    items: ".liked-item" }
+];
 
-const clamp01 = v => Math.min(1, Math.max(0, v));
+const fxClamp = v => Math.min(1, Math.max(0, v));
 
 function updateScrollFx() {
-  const nav = document.querySelector(navSelector);
-  const top = document.querySelector(topSelector);
-  const bottomEdge = nav ? nav.getBoundingClientRect().top : window.innerHeight;
-  const topEdge = top ? top.getBoundingClientRect().bottom : 0;
+  FX_LISTS.forEach(({ scroller, items }) => {
+    const box = document.querySelector(scroller);
+    if (!box || !box.offsetParent) return;      // экран сейчас скрыт
+    const area = box.getBoundingClientRect();
 
-  document.querySelectorAll('.fx').forEach(el => {
-    const r = el.getBoundingClientRect();
-    // у нижнего края смотрим на верх элемента, у верхнего края на его низ
-    const nearBottom = clamp01((r.top - (bottomEdge - FADE_ZONE)) / FADE_ZONE);
-    const nearTop = clamp01(((topEdge + FADE_ZONE) - r.bottom) / FADE_ZONE);
-    const p = Math.max(nearBottom, nearTop); // 0..1
+    box.querySelectorAll(items).forEach(el => {
+      const r = el.getBoundingClientRect();
+      // считаем по центру и настоящей высоте, чтобы уменьшение не влияло на расчёт
+      const mid = (r.top + r.bottom) / 2;
+      const top = mid - el.offsetHeight / 2;
+      const bottom = mid + el.offsetHeight / 2;
 
-    el.style.transform = `scale(${1 - (1 - MIN_SCALE) * p})`;
-    el.style.opacity = 1 - (1 - MIN_OPACITY) * p;
+      const nearBottom = fxClamp((top - (area.bottom - FX_ZONE)) / FX_ZONE);
+      const nearTop = fxClamp(((area.top + FX_ZONE) - bottom) / FX_ZONE);
+      const p = Math.max(nearBottom, nearTop);   // 0 = норма, 1 = у самого края
+
+      el.style.scale = 1 - (1 - FX_MIN_SCALE) * p;
+      el.style.opacity = 1 - (1 - FX_MIN_OPACITY) * p;
+    });
   });
 }
 
-let ticking = false;
-function onScroll() {
-  if (ticking) return;
-  ticking = true;
-  requestAnimationFrame(() => { updateScrollFx(); ticking = false; });
+// пересчитываем каждый кадр, пока идёт скролл или анимация (раскрытие аккордеона и т.п.)
+let fxUntil = 0, fxRunning = false;
+function fxKick(ms = 500) {
+  fxUntil = Math.max(fxUntil, performance.now() + ms);
+  if (fxRunning) return;
+  fxRunning = true;
+  (function loop() {
+    updateScrollFx();
+    if (performance.now() < fxUntil) requestAnimationFrame(loop);
+    else fxRunning = false;
+  })();
 }
 
-scroller.addEventListener('scroll', onScroll, { passive: true });
-window.addEventListener('resize', onScroll);
-updateScrollFx(); // один раз при загрузке
+FX_LISTS.forEach(({ scroller }) => {
+  const box = document.querySelector(scroller);
+  box.addEventListener("scroll", () => fxKick(100), { passive: true });
+  box.addEventListener("click", () => fxKick(600));   // лайк, раскрытие, «показать ещё»
+});
+window.addEventListener("resize", () => fxKick(200));
+
+// после каждого переключения экрана тоже пересчитываем
+const _showScreen = showScreen;
+showScreen = function (id) { _showScreen(id); fxKick(600); };
