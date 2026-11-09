@@ -754,3 +754,11 @@ button { font-family: inherit; }
   0%, 100% { transform: translateY(0) rotate(-6deg); }
   50%      { transform: translateY(-6px) rotate(6deg); }
 }
+/* ===== ЭФФЕКТ ПРИ СКРОЛЛЕ ===== */
+.category-card, .acc-card, .liked-item { will-change: scale, opacity; }
+
+/* анимация появления лайкнутых больше не «замораживает» прозрачность */
+.liked-item { animation: item-in 0.35s ease backwards; }
+
+/* запас снизу, чтобы последняя лайкнутая карточка могла уйти от края */
+#liked-list { padding-bottom: 40px; }
